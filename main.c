@@ -12,6 +12,7 @@ int main() {
     {
         freq[(unsigned char)fgetc(fr)] ++;
     }
+    printf("Hello");
     fclose(fr);
     return 0;
 }
