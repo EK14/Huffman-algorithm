@@ -11,7 +11,7 @@ int main()
 	FILE* fr = fopen("txt.txt", "rb");
 	if (!fr)
 	{
-		printf("Cannot open the file for reading\n");
+		printf("Error opening the file for reading\n");
 		return -1;
 	}
 	fseek(fr, 0L, SEEK_END);
@@ -31,10 +31,19 @@ int main()
 			data.freq = freq[i];
 			int a = i;
 			data.symb = i;
+			data.left = NULL;
+			data.right = NULL;
+			data.level = 0;
 			Add2List(&phead, &data);
 		}
 	}
+	
 	PrintList(phead);
+
+	phead = MakeTreeFromList(phead);
+	printf("\n");
+	int level = -1;
+	Simmetric(phead, &level);
 	return 0;
 
 }

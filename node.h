@@ -1,4 +1,4 @@
-#define CODE_SIZE 8
+#define CODE_SIZE 1000 // How much?
 #ifndef NODE_H
 #define NODE_H 
 
@@ -14,6 +14,9 @@ typedef struct node{
 void Add2List(NODE** pphead, NODE* tmp);
 
 void PrintList(const NODE* phead);
-//NODE* Add2Tree(NODE* root, NODE* tmp);
+
+NODE* MakeTreeFromList(NODE* head);
+
+void Simmetric(NODE* root, int * level);
 
 #endif
