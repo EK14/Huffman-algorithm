@@ -6,7 +6,7 @@
 
 int main()
 {
-	NODE data;
+	NODE data;		// I don't like the name
 	int freq[256] = { 0 };
 	FILE* fr = fopen("txt.txt", "rb");
 	if (!fr)
@@ -43,7 +43,9 @@ int main()
 	phead = MakeTreeFromList(phead);
 	printf("\n");
 	int level = -1;
-	Simmetric(phead, &level);
+	unsigned char code[CODE_SIZE] = { 0 };
+	NODE * arrOfStruct[256];	// I don't like the name
+	Simmetric(phead, &level, &code, &arrOfStruct);
 	return 0;
 
 }
