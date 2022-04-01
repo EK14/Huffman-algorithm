@@ -61,47 +61,41 @@ NODE* MakeTreeFromList(NODE* head)
 }
 
 
+
 void Simmetric(NODE* root, int * level, unsigned char * code, NODE ** arr)
-{
-	if (root)
+{										// изначально в функцию передается level = -1
+	if (root)							
 	{
-		++(*level);
-		if (root->left)
+		++(*level);						// если корень существует, то в level записывается его уровень
+		if (root->left)					// если есть левый потомок
 		{
-			code[*level] = '0';
-			Simmetric(root->left, level, code, arr);
+			code[*level] = '0';			// При проходе налево добавляем ноль
+			Simmetric(root->left, level, code, arr);	// рекуррентно (или правильно рекурсивно?) вызываем функцию
 		}
-		else if (root->isSymb == 1)
+		else if (root->isSymb == 1)				// если дошли до конца, то |p.s.
 		{
-			for (int i = 0; i < *level; ++i)
+			for (int i = 0; i < *level; ++i)	// записываем в структуру корня код 
 			{
 				root->code[i] = code[i];
 			}
 			arr[root->symb] = root;
 		}		
-		root->level = *level;
+		root->level = *level;					// и уровень (длину кода)
 		if (root->isSymb == 1)
 		{
-			//printf("['%c' f= %d l= %d c= ", root->symb, root->freq, root->level);
-			/*for (int i = 0; i < *level; ++i)
-			{
-				printf("%c", root->code[i]);
-			}*/
-			//printf("]\n");
-		}
-		if (root->right)
-		{
-			code[*level] = '1';
-			Simmetric(root->right,level, code, arr);
-		}
-		else if (root->isSymb == 1)
-		{
+			printf("['%c' f= %d l= %d c= ", root->symb, root->freq, root->level);
 			for (int i = 0; i < *level; ++i)
 			{
-				root->code[i] = code[i];
+				printf("%c", root->code[i]);
 			}
+			printf("]\n");
 		}
-		--(*level);	
+		if (root->right)				// аналогично для правого корня
+		{
+			code[*level] = '1';			// но при проходе направо добавляем единицу
+			Simmetric(root->right,level, code, arr);
+		}
+		--(*level);			// слева и справа потомков нет ==> возращаемся к родителю, на один уровень ниже
 	}
 }
 

@@ -1,7 +1,7 @@
 #define CODE_SIZE 16 // How much should the number be?
 #ifndef NODE_H
 #define NODE_H 
-
+	
 typedef struct node{
 	unsigned char symb;
 	unsigned char isSymb;
