@@ -31,7 +31,7 @@ void PrintList(const NODE* phead)
 {
 	while (phead)
 	{
-		printf("['%c' %d]-> ", phead->symb, phead->freq);
+		printf( "['%c' %d]-> ", phead->symb, phead->freq);
 		phead = phead->next;
 	}
 }

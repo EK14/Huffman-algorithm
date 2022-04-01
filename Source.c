@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "node.h"
+#include <conio.h>
+#include <locale.h>
 #define SIZE_OF_STR 1000000
 #define BIT8 8
 
@@ -9,6 +11,8 @@
 // Заголовочный можно поделить на Сптсок, Дерево, Объединение
 int main()
 {
+
+	setlocale(LC_ALL, "Rus");
 	printf("Enter the file name and its extension: ");
 	char name[15];
 	scanf("%s", &name);
@@ -79,11 +83,11 @@ int main()
 		symb.mbit.b1 = str[i * BIT8 + 0];							//|
 		symb.mbit.b2 = str[i * BIT8 + 1];							//|
 		symb.mbit.b3 = str[i * BIT8 + 2];							//|
-		symb.mbit.b4 = str[i * BIT8 + 3];							//|
-		symb.mbit.b5 = str[i * BIT8 + 4];							//|
-		symb.mbit.b6 = str[i * BIT8 + 5];							//|
-		symb.mbit.b7 = str[i * BIT8 + 6];							//|
-		symb.mbit.b8 = str[i * BIT8 + 7];							//|
+		symb.mbit.b4 = str[i * BIT8 + 3];							//|		Используются:
+		symb.mbit.b5 = str[i * BIT8 + 4];							//|		- fr
+		symb.mbit.b6 = str[i * BIT8 + 5];							//|		- str
+		symb.mbit.b7 = str[i * BIT8 + 6];							//|		- res
+		symb.mbit.b8 = str[i * BIT8 + 7];							//|		- count
 		res[i] = symb.symb;											//|
 	}																//|
 	fr = fopen(name, "wb");											//|
