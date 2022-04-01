@@ -11,6 +11,21 @@ typedef struct node{
 	struct node *left, *right, *next;
 }NODE;
 
+typedef union bit2char {
+	char symb;
+	struct bit {
+		unsigned b1 : 1;
+		unsigned b2 : 1;
+		unsigned b3 : 1;
+		unsigned b4 : 1;
+		unsigned b5 : 1;
+		unsigned b6 : 1;
+		unsigned b7 : 1;
+		unsigned b8 : 1;
+	}mbit;
+}BIT2CHAR;
+
+
 void Add2List(NODE** pphead, NODE* tmp);
 
 void PrintList(const NODE* phead);
@@ -19,5 +34,6 @@ NODE* MakeTreeFromList(NODE* head);
 
 void Simmetric(NODE* root, int* level, unsigned char* code, NODE** arr);
 
+NODE* DeleteTree(NODE* root);
 
 #endif

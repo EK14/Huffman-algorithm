@@ -77,18 +77,17 @@ void Simmetric(NODE* root, int * level, unsigned char * code, NODE ** arr)
 			{
 				root->code[i] = code[i];
 			}
-			//root->code[*level] = '\0';
 			arr[root->symb] = root;
 		}		
 		root->level = *level;
 		if (root->isSymb == 1)
 		{
-			printf("['%c' f= %d l= %d c= ", root->symb, root->freq, root->level);
-			for (int i = 0; i < *level; ++i)
+			//printf("['%c' f= %d l= %d c= ", root->symb, root->freq, root->level);
+			/*for (int i = 0; i < *level; ++i)
 			{
 				printf("%c", root->code[i]);
-			}
-			printf("]\n");
+			}*/
+			//printf("]\n");
 		}
 		if (root->right)
 		{
@@ -105,4 +104,16 @@ void Simmetric(NODE* root, int * level, unsigned char * code, NODE ** arr)
 		--(*level);	
 	}
 }
+
+NODE* DeleteTree(NODE* root)
+{
+	if (root)
+	{
+		root->left = DeleteTree(root->left);
+		root->right = DeleteTree(root->right);
+		free(root);
+	}
+	return NULL;
+}
+
 
