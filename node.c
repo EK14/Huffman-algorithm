@@ -6,11 +6,12 @@ void Add2List(NODE** pphead, NODE* tmp)
 {
 	while (*pphead)
 	{
-		if ((*pphead)->freq > tmp->freq)
+		if ((*pphead)->freq >= tmp->freq)
 			break;
 		pphead = &((*pphead)->next);
 	}
 	NODE* pnew = (NODE*)malloc(sizeof(NODE));
+	pnew->freq = 0;
 	pnew->freq = tmp->freq;
 	pnew->symb = tmp->symb;
 	pnew->isSymb = tmp->isSymb;
@@ -30,10 +31,9 @@ void PrintList(const NODE* phead)
 {
 	while (phead)
 	{
-		printf("['%c' %d %d]-> ", phead->symb, phead->freq, phead->isSymb);
+		printf("['%c' %d]-> ", phead->symb, phead->freq);
 		phead = phead->next;
 	}
-	printf("\n");
 }
 
 NODE* MakeNodeFromNode(const NODE* left, const NODE* right)
@@ -61,17 +61,48 @@ NODE* MakeTreeFromList(NODE* head)
 }
 
 
-void Simmetric(NODE* root, int * level)
+void Simmetric(NODE* root, int * level, unsigned char * code, NODE ** arr)
 {
 	if (root)
 	{
 		++(*level);
-		Simmetric(root->left, level);
+		if (root->left)
+		{
+			code[*level] = '0';
+			Simmetric(root->left, level, code, arr);
+		}
+		else if (root->isSymb == 1)
+		{
+			for (int i = 0; i < *level; ++i)
+			{
+				root->code[i] = code[i];
+			}
+			//root->code[*level] = '\0';
+			arr[root->symb] = root;
+		}		
 		root->level = *level;
-		printf("['%c' %d %d %d]   ", root->symb, root->freq, root->isSymb, root->level);
-		Simmetric(root->right, level);
-		--(*level);
-		
+		if (root->isSymb == 1)
+		{
+			printf("['%c' f= %d l= %d c= ", root->symb, root->freq, root->level);
+			for (int i = 0; i < *level; ++i)
+			{
+				printf("%c", root->code[i]);
+			}
+			printf("]\n");
+		}
+		if (root->right)
+		{
+			code[*level] = '1';
+			Simmetric(root->right,level, code, arr);
+		}
+		else if (root->isSymb == 1)
+		{
+			for (int i = 0; i < *level; ++i)
+			{
+				root->code[i] = code[i];
+			}
+		}
+		--(*level);	
 	}
-
 }
+

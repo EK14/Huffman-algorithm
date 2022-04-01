@@ -1,4 +1,4 @@
-#define CODE_SIZE 1000 // How much?
+#define CODE_SIZE 16 // How much should the number be?
 #ifndef NODE_H
 #define NODE_H 
 
@@ -17,6 +17,7 @@ void PrintList(const NODE* phead);
 
 NODE* MakeTreeFromList(NODE* head);
 
-void Simmetric(NODE* root, int * level);
+void Simmetric(NODE* root, int* level, unsigned char* code, NODE** arr);
+
 
 #endif
