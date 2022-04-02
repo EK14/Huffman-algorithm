@@ -3,4 +3,4 @@ project(PL2 C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(untitled Dearchive.c)
+add_executable(untitled source.c)
