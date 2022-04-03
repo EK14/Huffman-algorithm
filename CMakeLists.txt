@@ -3,4 +3,4 @@ project(PL2 C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(untitled Source.c binary.c binary.h node.c node.h btree.c btree.h)
+add_executable(untitled main.c binary.c binary.h node.c node.h btree.c btree.h)
