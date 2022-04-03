@@ -7,11 +7,17 @@ void MakeBinaryStr(FILE * fr,unsigned char *str, long length, int* count, int* t
 {
     fseek(fr, 0, SEEK_SET);
     str[*count] = '\0';
+    int m = 0, l = 20;
     for (int i = 0; i < length; ++i)
     {
         int symb = (unsigned char)fgetc(fr);
         strncat(str, arr[symb], strlen(arr[symb]));
-
+        if (i == length/l){
+            printf("Processing... %d", m);
+            printf("%\n");
+            m=m+5;
+            l--;
+        }
     }
     *count = strlen(str);
     *tail = ((*count) / 8 + ((*count) % 8 ? 1 : 0)) * 8 - (*count);
