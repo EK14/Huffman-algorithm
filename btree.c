@@ -1,6 +1,5 @@
 #include "btree.h"
 #include <stdlib.h>
-#include "btree.h"
 #include <stdio.h>
 
 NODE* MakeNodeFromNode(const NODE* left, const NODE* right)

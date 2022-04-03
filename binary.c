@@ -16,8 +16,8 @@ void MakeBinaryStr(FILE * fr, char *str, int length, int* count, int* tail, NODE
             ++(*count);
         }
     }
-    tail = ((*count) / 8 + ((*count) % 8 ? 1 : 0)) * 8 - (*count);
-    for (int i = 0; i < tail; ++i)
+    *tail = ((*count) / 8 + ((*count) % 8 ? 1 : 0)) * 8 - (*count);
+    for (int i = 0; i < *tail; ++i)
     {
         str[*count] = '0';
         ++(*count);
@@ -48,7 +48,4 @@ void Compression(FILE *fr, char * str, int length, int count, int tail)
         printf("%c", res[i]);
     }
     // fclose(fr);
-
-
-
 }
