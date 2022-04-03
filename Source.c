@@ -7,11 +7,10 @@
 #include <locale.h>
 #define SIZE_OF_STR 1000000
 
-
 int main()
 {
     char* locale = setlocale(LC_ALL, "");
-    printf("Enter the file name and its extension: ");
+    printf("Enter the file name and its extension: \n");
     char name[15];
     scanf("%s", &name);
     FILE* fr = fopen(name, "rb");
@@ -50,9 +49,9 @@ int main()
     fr = fopen(name, "rb+");
     fclose(fr);
     DeleteTree(phead);
+
     printf("\n%d\n", count - tail);
     printf("%d\n", count);
     //printf("%s", str);
     return 0;
-
 }

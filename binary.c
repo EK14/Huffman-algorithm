@@ -40,11 +40,42 @@ void Compression(FILE *fr, char * str, int length, int count, int tail)
         symb.mbit.b8 = str[i * BIT8 + 7];
         res[i] = symb.symb;
     }
-    //fr = fopen(name, "wb");
+
+    ///_______|-/_______////
+
+    printf("Enter the output file name and its extension (under 15 symbols): \n");
+    char name[15];
+    scanf("%s", &name);
+    FILE* mf = fopen(name, "w");
+    if (!mf)
+    {
+        printf("Error opening the file for reading\n");
+        return -1;
+    }
+    fseek(mf, 0, SEEK_SET);
+
+    for (int i = 0, i < ) /////////////////
     for (int i = 0; i < count / 8; ++i)
     {
+        //Запись данных в файл
+        printf ("Файл закрыт\n");
+        fprintf(mf, "%c", res[i]);
+        printf("%c", res[i]);
+    }
+    fclose (mf);
+
+    ///_______|-/_______////
+
+    //fr = fopen(name, "wb");
+
+    for (int i = 0; i < count / 8; ++i)
+    {
+        //Запись данных в файл
+        printf ("Файл закрыт\n");
         //fprintf(fr, "%c", res[i]);
         printf("%c", res[i]);
     }
+    fclose (mf);
     // fclose(fr);
+
 }
