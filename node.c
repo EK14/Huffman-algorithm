@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include "node.h"
 
-void CreateList(FILE * fr, NODE ** phead, int * freq, long length)
+void CreateList(FILE * fr, NODE ** phead, int * freq)
 {
     NODE data;
     data.isSymb = 1;
@@ -9,13 +9,7 @@ void CreateList(FILE * fr, NODE ** phead, int * freq, long length)
     data.right = NULL;
     data.next = NULL;
     data.level = 0;
-    for (int i = 0; i < length; ++i)
-    {
-        //int num = (unsigned char)fgetc(fr);
-        //printf("%c", num);
-        //freq[num]++;
-        freq[(unsigned char)fgetc(fr)]++;
-    }
+
     for (int i = 0; i < 256; ++i)
     {
         if (freq[i] > 0)

@@ -5,7 +5,6 @@
 #include "btree.h"
 #include "binary.h"
 #include <locale.h>
-#define SIZE_OF_STR 1000
 
 
 int main()
@@ -23,10 +22,14 @@ int main()
     fseek(fr, 0L, SEEK_END);
     long length = ftell(fr);
     fseek(fr, 0, SEEK_SET);
-    NODE* phead = NULL;
     int freq[256] = { 0 };
+    for (int i = 0; i < length; ++i)
+    {
+        freq[(unsigned char)fgetc(fr)]++;
+    }
+    NODE* phead = NULL;
 
-    CreateList(fr, &phead, freq,  length);
+    CreateList(fr, &phead, freq);
 
     //PrintList(phead);
     //printf("\n");
@@ -36,23 +39,29 @@ int main()
     int level = -1;
     int maxlev = 0;
     unsigned char code[CODE_SIZE] = { 0 };
-    unsigned char arrofCode[256][CODE_SIZE];// = { 0 };
+    unsigned char arrofCode[256][CODE_SIZE];
 
     Simmetric(phead, &level, &maxlev, &code, arrofCode);
+
     char* str = (unsigned char*)malloc((length * maxlev) * sizeof(unsigned char));
     int count = 0;
     int tail = 0;
+
     MakeBinaryStr(fr, str, length, &count, &tail, arrofCode);
 
-    Compression(fr, str, length, count, tail);
+    fr = fopen(name, "wb");
 
-    //fr = fopen(name, "w");
-    //fclose(fr);
+    Compression(fr, str, length, count, tail, freq);
+   
     free(str);
     DeleteTree(phead);
-    //printf("\n%d\n", count - tail);
-    //printf("%d\n", count);
-    //printf("%s", str);
+    //FILE* fr = fopen(name, "rb+");
+    fopen(name, "rb+");
+    Decompression(fr);
+    fclose(fr);
+    
+
+   
     return 0;
 
 }
