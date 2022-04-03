@@ -1,8 +1,10 @@
-#include "binary.h"
 #include <stdlib.h>
+#include <stdio.h>
+#include "binary.h"
 #define BIT8 8
 
 void MakeBinaryStr(FILE * fr, char *str, int length, int* count, int* tail, NODE** arr)
+
 {
 	fseek(fr, 0, SEEK_SET);											
 	for (int i = 0; i < length; ++i)											
@@ -14,18 +16,18 @@ void MakeBinaryStr(FILE * fr, char *str, int length, int* count, int* tail, NODE
 			++(*count);										
 		}															
 	}																
-	tail = ((*count) / 8 + ((*count) % 8 ? 1 : 0)) * 8 - (*count);	
-	for (int i = 0; i < tail; ++i)								
+	*tail = ((*count) / 8 + ((*count) % 8 ? 1 : 0)) * 8 - (*count);
+	for (int i = 0; i < *tail; ++i)
 	{															
 		str[*count] = '0';										
 		++(*count);												
 	}															
-	fclose(fr);														
+	fclose(fr);
 }
 
 void Compression(FILE *fr, char * str, int length, int count, int tail)
 {
-	BIT2CHAR symb;												   
+	BIT2CHAR symb;
 	char* res = (char*)malloc((count / 8) * sizeof(char));			
 	for (int i = 0; i < count / 8; ++i)								
 	{																
@@ -46,7 +48,5 @@ void Compression(FILE *fr, char * str, int length, int count, int tail)
 		printf("%c", res[i]);
 	}																
 	// fclose(fr);														
-															
-
 
 }
