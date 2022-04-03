@@ -1,5 +1,4 @@
 #include "binary.h"
-#include "binary.h"
 #include <stdlib.h>
 #include <stdio.h>
 #define BIT8 8

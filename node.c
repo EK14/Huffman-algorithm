@@ -1,5 +1,6 @@
 #include "node.h"
 #include <stdlib.h>
+#include <stdio.h>
 #include "node.h"
 
 void CreateList(FILE * fr, NODE ** phead, int * freq, int length)
