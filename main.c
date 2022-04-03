@@ -50,7 +50,7 @@ int main()
     //fclose(fr);
     free(str);
     DeleteTree(phead);
-   //printf("\n%d\n", count - tail);
+    //printf("\n%d\n", count - tail);
     //printf("%d\n", count);
     //printf("%s", str);
     return 0;
