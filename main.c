@@ -6,13 +6,13 @@
 #include "binary.h"
 #include <locale.h>
 
-
 int main()
 {
     setlocale(LC_ALL, "");
     printf("Enter the file name and its extension: ");
     char name[15];
     scanf("%s", name);
+    name[strlen(name)] = '\0';
     FILE* fr = fopen(name, "rb");
     if (!fr)
     {
@@ -51,17 +51,12 @@ int main()
 
     fr = fopen(name, "wb");
 
-    Compression(fr, str, length, count, tail, freq);
+    Compression(fr, str, length, count, tail, freq, maxlev);
    
     free(str);
     DeleteTree(phead);
-    //FILE* fr = fopen(name, "rb+");
-    fopen(name, "rb+");
-    Decompression(fr);
-    fclose(fr);
-    
 
-   
+    Decompression(fr, name);   
     return 0;
 
 }

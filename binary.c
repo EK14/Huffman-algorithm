@@ -11,8 +11,6 @@ void MakeBinaryStr(FILE * fr,unsigned char *str, long length, int* count, int* t
     str[*count] = '\0';
     for (int i = 0; i < length; ++i)
     {
-        //int symb = (unsigned char)fgetc(fr);
-        //strncat(str, arr[symb], strlen(arr[symb]));
         strcat(str, arr[(unsigned char)fgetc(fr)]);
     }
     *count = strlen(str);
@@ -27,7 +25,7 @@ void MakeBinaryStr(FILE * fr,unsigned char *str, long length, int* count, int* t
  
 }
 
-void Compression(FILE *fr, const unsigned char * str, long length, int count, int tail, int freq[256])
+void Compression(FILE *fr, const unsigned char * str, long length, int count, int tail, int freq[256], int maxlev)
 {
     BIT2CHAR symb;
     char* res = (char*)malloc(((count + 1)/ 8) * sizeof(char));
@@ -45,48 +43,109 @@ void Compression(FILE *fr, const unsigned char * str, long length, int count, in
             symb.mbit.b8 = (int)str[i * BIT8 + 7];
             res[i] = symb.symb;
         }
-        fprintf(fr, "%d ", tail);
+
+        fprintf(fr, "%d %d %d ", maxlev, tail, (count + 1) / 8);
+
         for (int i = 0; i < 256; ++i)
             fprintf(fr, "%d ", freq[i]);
         for (int i = 0; i < count / 8; ++i)
         {
             fprintf(fr, "%c", res[i]);
-            //printf("%c", res[i]);
         }
-        fprintf(fr, "\n");
         fclose(fr);
     }
 }
 
-void Decompression(FILE* fr)
+void Decompression(FILE* fr, char name[])
 {
+    fr = fopen(name, "rb");
     long length = 0;
-    int tail = 0;
+    int tail, maxlev, lenOfStr;
     int freq[256] = { 0 };
-    fscanf(fr, "%d", &tail);
+    fscanf(fr, "%d ", &maxlev);
+    fscanf(fr, "%d ", &tail);
+    fscanf(fr, "%d ", &lenOfStr);
     for (int i = 0; i < 256; ++i)
     {
         fscanf(fr, "%d ", &freq[i]);
         length = length + freq[i];
     }
-    NODE* phead = NULL;
-
-    CreateList(fr, &phead, freq);
-
     BIT2CHAR symb;
-    //char* res = (char*)malloc(length * maxlev) * sizeof(char));
-    while (fr)
-    {
-        symb.symb= fgetc(fr);
-        printf("%d%d%d%d%d%d%d%d", symb.mbit.b1, symb.mbit.b2, symb.mbit.b3, symb.mbit.b4, symb.mbit.b5, symb.mbit.b6, symb.mbit.b7, symb.mbit.b8);
+    char* str = (char*)malloc((length * maxlev) * sizeof(char));
+    
+    long count = -1; 
+   for (int i =0; i < lenOfStr; ++i)
+   {
+        symb.symb= fgetc(fr); 
+        if (symb.mbit.b1 == 0 && count < lenOfStr*BIT8-tail-1)
+            str[++count] = '0';
+        else if (count < lenOfStr * BIT8 - tail - 1)
+            str[++count] = '1';
+        if (symb.mbit.b2 == 0 && count < lenOfStr * BIT8 - tail - 1)
+            str[++count] = '0';
+        else if (count < lenOfStr * BIT8 - tail - 1)
+            str[++count] = '1';
+        if (symb.mbit.b3 == 0 && count < lenOfStr * BIT8 - tail - 1)
+            str[++count] = '0';
+        else if (count < lenOfStr * BIT8 - tail - 1)
+            str[++count] = '1';
+        if (symb.mbit.b4 == 0 && count < lenOfStr * BIT8 - tail - 1)
+            str[++count] = '0';
+        else if (count < lenOfStr * BIT8 - tail - 1)
+            str[++count] = '1';
+        if (symb.mbit.b5 == 0 && count < lenOfStr * BIT8 - tail - 1)
+            str[++count] = '0';
+        else if (count < lenOfStr * BIT8 - tail - 1)
+            str[++count] = '1';
+        if (symb.mbit.b6 == 0 && count < lenOfStr * BIT8 - tail - 1)
+            str[++count] = '0';
+        else if (count < lenOfStr * BIT8 - tail - 1)
+            str[++count] = '1';
+        if (symb.mbit.b7 == 0 && count < lenOfStr * BIT8 - tail - 1)
+            str[++count] = '0';
+        else if (count < lenOfStr * BIT8 - tail - 1)
+            str[++count] = '1';
+        if (symb.mbit.b8 == 0 && count < lenOfStr * BIT8 - tail - 1)
+            str[++count] = '0';
+        else if (count < lenOfStr * BIT8 - tail - 1)
+            str[++count] = '1';
     }
+    str[++count] = '\0';
+    fclose(fr);
+    NODE* phead = NULL;
+    CreateList(fr, &phead, freq);
+   phead = MakeTreeFromList(phead);
 
-   
-   
+   lenOfStr = count;
+   count = -1;
+   NODE* head = phead;
+   fr = fopen(name, "wb");
+   while (count <= lenOfStr)
+   {
+       if (head)
+       {
+           if (head->isSymb == 1)
+           {
+               fprintf(fr, "%c", head->symb);
+               head = phead;
+           }
+           else
+           {
+               if (str[++count] == '0')
+               {
+                   head = head->left;
+               }
+               else
+               {
+                   head = head->right;
+               }
+           }
+       }
 
+   }
 
-
-    phead = MakeTreeFromList(phead);
-
+   fclose(fr);
+   free(str);
+   DeleteTree(phead);
 }
 

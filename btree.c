@@ -48,7 +48,6 @@ void Simmetric(NODE* root, int * level, int * max, unsigned char* code, unsigned
         else if (root->isSymb == 1)
         {
             int n = root->symb;
-           //strcpy(arr[root->symb], code);
            for (int i = 0; i < *level; ++i)
            {
                arr[n][i] = code[i];
