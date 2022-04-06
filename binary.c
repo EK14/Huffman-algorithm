@@ -11,7 +11,10 @@ void MakeBinaryStr(FILE * fr,unsigned char *str, long length, int* count, int* t
     str[*count] = '\0';
     for (int i = 0; i < length; ++i)
     {
-        strcat(str, arr[(unsigned char)fgetc(fr)]);
+        //strcat(str, arr[(unsigned char)fgetc(fr)]);
+        int symb = (unsigned char)fgetc(fr);
+        memcpy(str, arr[symb], strlen(arr[symb]));
+
     }
     *count = strlen(str);
     *tail = ((*count) / 8 + ((*count) % 8 ? 1 : 0)) * 8 - (*count);
@@ -74,6 +77,7 @@ void Decompression(FILE* fr, char name[])
     char* str = (char*)malloc((length * maxlev) * sizeof(char));
     
     long count = -1; 
+
    for (int i =0; i < lenOfStr; ++i)
    {
         symb.symb= fgetc(fr); 
