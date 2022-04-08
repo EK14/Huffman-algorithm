@@ -1,17 +1,18 @@
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 #include "node.h"
 #include "btree.h"
 #include "binary.h"
 #include <locale.h>
-#define SIZE_OF_STR 1000000
-
 
 int main()
 {
-    char* locale = setlocale(LC_ALL, "");
+    setlocale(LC_ALL, "");
     printf("Enter the file name and its extension: ");
     char name[15];
     scanf("%s", name);
+    name[strlen(name)] = '\0';
     FILE* fr = fopen(name, "rb");
     if (!fr)
     {
@@ -21,36 +22,44 @@ int main()
     fseek(fr, 0L, SEEK_END);
     long length = ftell(fr);
     fseek(fr, 0, SEEK_SET);
-    NODE* phead = NULL;
     int freq[256] = { 0 };
+    for (int i = 0; i < length; ++i)
+    {
+        freq[(unsigned char)fgetc(fr)]++;
+    }
+    NODE* phead = NULL;
 
-    CreateList(fr, &phead, freq,  length);
+    CreateList(fr, &phead, freq);
 
-    PrintList(phead);
-    printf("\n");
+    //PrintList(phead);
+    //printf("\n");
 
     phead = MakeTreeFromList(phead);
 
     int level = -1;
+    int maxlev = 0;
     unsigned char code[CODE_SIZE] = { 0 };
-    NODE * arrOfStruct[256];
+    unsigned char arrofCode[256][CODE_SIZE];
 
-    Simmetric(phead, &level, code, arrOfStruct);
+    Simmetric(phead, &level, &maxlev, &code, arrofCode);
 
-    unsigned char str[SIZE_OF_STR] = { 0 };
-    int count = 0;
+    char* str = (char*)malloc((length * maxlev) * sizeof(char));
+    long count = 0;
     int tail = 0;
 
-    MakeBinaryStr(fr, str, length, &count, &tail, arrOfStruct);
+    MakeBinaryStr(fr, str, length, &count, &tail, arrofCode);
 
-    Compression(fr, str, length, count, tail);
+    fr = fopen(name, "wb");
 
-    //fr = fopen(name, "w");
-    fclose(fr);
+    Compression(fr, str, length, count, tail, freq, maxlev);
+
+    free(str);
     DeleteTree(phead);
-    printf("\n%d\n", count - tail);
-    printf("%d\n", count);
-    //printf("%s", str);
-    return 0;
 
+    char choice[3];
+    printf("Do you want to decompress file? Answer yes or no\n");
+    scanf("%s", choice);
+    if(!strcmp(choice, "yes"))
+        Decompression(fr, name);
+    return 0;
 }

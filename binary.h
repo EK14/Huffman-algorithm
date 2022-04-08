@@ -17,9 +17,10 @@ typedef union bit2char {
     }mbit;
 }BIT2CHAR;
 
-void MakeBinaryStr(FILE* fr,unsigned char* str, long length, int* count, int* tail, NODE** arr);
+void MakeBinaryStr(FILE* fr,  char* str, long length, long* count, int* tail, unsigned char arr[256][CODE_SIZE]);
 
-void Compression(FILE* fr,const unsigned char* str, long length, int count, int tail);
+void Compression(FILE* fr, const unsigned char* str, long length, int count, int tail, int freq[256], int maxlev);
 
+void Decompression(FILE* fr, char name[]);
 #endif
 
