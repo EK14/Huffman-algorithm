@@ -52,7 +52,10 @@ void Simmetric(NODE* root, int * level, int * max, unsigned char* code, unsigned
             {
                 arr[n][i] = code[i];
             }
-            arr[n][*level] = '\0';
+            if(*level == 0 && !root->left && !root->right) {
+                arr[n][0] = '1';
+                *max = 1;
+            }
             if (*level > *max)
                 *max = *level;
             root->level = *level;
