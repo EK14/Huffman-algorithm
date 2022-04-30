@@ -2,7 +2,6 @@
 #include "binary.h"
 #include "btree.h"
 #include <stdlib.h>
-#include <string.h>
 #include <math.h>
 #define BIT8 8
 #define PART_TO_READ 32
@@ -60,14 +59,14 @@ void Compression(FILE *fw, const unsigned char * str, long length, int count, in
     }
 }
 
-void Decompression(FILE* fw, FILE* fr, char name[], long length)
+void Decompression(FILE* fw, FILE* fr, char name[])
 {
     int ind = 0;
     char transfer[256] = {'\0'}, byte[9] = {'\0'};
     fr = fopen(name, "rb");
     fw = fopen("temp.txt", "ab");
     fseek(fr, 0L, SEEK_END);
-    long l = ftell(fr), schet = 0;
+    long length = ftell(fr);
     fseek(fr, 0, SEEK_SET);
     long len = 0;
     int tail, maxlev, remaind = 0;
@@ -83,11 +82,11 @@ void Decompression(FILE* fw, FILE* fr, char name[], long length)
     phead = MakeTreeFromList(phead);
 
     BIT2CHAR symb;
-    int readsnumb = (int)(l / PART_TO_READ * pow(2, -20)) + 1;
+    int readsnumb = (int)(length / PART_TO_READ * pow(2, -20)) + 1;
 
     for(int i=0; i < readsnumb + 1; ++i) {
         len = 0;
-        char *str = (char *) malloc((PART_TO_READ * pow(2, 20)* 256) * sizeof(char));
+        char *str = (char *) malloc((PART_TO_READ * pow(2, 20)* maxlev) * sizeof(char));
         char * ptr = str;
         if(strlen(transfer) != 0){
                 memcpy(str, transfer, remaind);
@@ -122,9 +121,9 @@ void Decompression(FILE* fw, FILE* fr, char name[], long length)
         remaind = len;
         if(ind > 256 && i != readsnumb)
             ind = ind - 256;
-        count = -1;
+        count = 0;
         NODE *head = phead;
-        while (count < len) {
+        while (len != 0) {
             if (head) {
                 if (head->isSymb) {
                     fprintf(fw, "%c", head->symb);
@@ -136,7 +135,7 @@ void Decompression(FILE* fw, FILE* fr, char name[], long length)
                         break;
                     }
                 } else {
-                    if (str[++count] == '0') {
+                    if (str[count++] == '0') {
                         head = head->left;
                     } else {
                         head = head->right;

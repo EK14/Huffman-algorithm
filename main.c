@@ -1,5 +1,5 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
 #include "node.h"
 #include "btree.h"
@@ -92,10 +92,10 @@ int main()
     remove("temp.txt");
     DeleteTree(phead);
 
-    char choice[3];
+    char choice[4];
     printf("Do you want to decompress file? Answer yes or no\n");
     scanf("%s", choice);
     if(!strcmp(choice, "yes"))
-        Decompression(fw, fr, name, length);
+        Decompression(fw, fr, name);
     return 0;
 }
