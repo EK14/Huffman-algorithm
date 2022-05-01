@@ -7,12 +7,12 @@
 #include <locale.h>
 #include <math.h>
 #define SIZE 1000
-#define PART_TO_READ 32
+#define PART_TO_READ 1
 
 int main()
 {
-    long count = 0;
-    int tail = 0, ind = 0;
+    long count = 0, ind;
+    int tail = 0;
     setlocale(LC_ALL, "");
     printf("Enter the file name and its extension: ");
     char name[15], transfer[8] = {'\0'};
@@ -45,6 +45,7 @@ int main()
     int level = -1;
     int maxlev = 0;
     int remaind = 0;
+    char * ptr2;
     unsigned char code[CODE_SIZE] = { 0 };
     unsigned char arrofCode[256][CODE_SIZE] = {'\0'};
 
@@ -58,9 +59,9 @@ int main()
         if(strlen(transfer) != 0) {
             memcpy(str, transfer, remaind);
             ptr += remaind;
-            count += remaind;
         }
         length = PART_TO_READ * pow(2,20);
+        count += remaind;
         MakeBinaryStr(fr, ptr, length, &count, &tail, arrofCode, i, readsnumb);
 
         remaind = count % 8;
@@ -68,7 +69,7 @@ int main()
 
         Compression(fw, str, length, count, tail, freq, maxlev);
 
-        char * ptr2 = str + ind;
+        ptr2 = str + ind;
         if(ind > 256){
             memcpy(transfer, ptr2, remaind);
         }

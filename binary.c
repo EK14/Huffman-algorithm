@@ -4,28 +4,25 @@
 #include <stdlib.h>
 #include <math.h>
 #define BIT8 8
-#define PART_TO_READ 32
+#define PART_TO_READ 1
 #define SIZE 10000
 
 void MakeBinaryStr(FILE * fr,char *str, long length, long* count, int* tail, unsigned char arr[256][CODE_SIZE], int flag, int readsnumb)
 {
     char * pt = str;
     int i = 0;
+    int symb = (unsigned char)fgetc(fr);
     while((i < length) && !feof(fr))
     {
-        //strcat(str, arr[(unsigned char)fgetc(fr)]);
-        int symb = (unsigned char)fgetc(fr);
         memcpy(pt, arr[symb], strlen(arr[symb]));
         pt +=  strlen(arr[symb]);
         *count += strlen(arr[symb]);
         i++;
+        if (i == length)
+            break;
+        symb = (unsigned char)fgetc(fr);
     }
     *tail = ((*count) / 8 + ((*count) % 8 ? 1 : 0)) * 8 - (*count);
-    //for (int i = 0; i < *tail; ++i)
-    //{
-    //    str[*count] = '0';
-    //    ++(*count);
-    //}
     if(flag == readsnumb - 1) {
         for (int i = 0; i < *tail; ++i) {
             str[(*count)++] = '0';
@@ -66,9 +63,8 @@ void Decompression(FILE* fw, FILE* fr, char name[])
     fr = fopen(name, "rb");
     fw = fopen("temp.txt", "ab");
     fseek(fr, 0L, SEEK_END);
-    long length = ftell(fr);
+    long length = ftell(fr), len;
     fseek(fr, 0, SEEK_SET);
-    long len = 0;
     int tail, maxlev, remaind = 0;
     int freq[256] = { 0 };
     fscanf(fr, "%d ", &maxlev);
@@ -90,10 +86,11 @@ void Decompression(FILE* fw, FILE* fr, char name[])
         char * ptr = str;
         if(strlen(transfer) != 0){
                 memcpy(str, transfer, remaind);
-                len += remaind;
+                //len += remaind;
                 ptr += remaind;
         }
-        long count = -1, loop = PART_TO_READ*pow(2,20);
+        len += remaind;
+        long loop = PART_TO_READ*pow(2,20);
         int j = 0;
         symb.symb = fgetc(fr);
         while (j < loop && !feof(fr)) {
@@ -109,21 +106,24 @@ void Decompression(FILE* fw, FILE* fr, char name[])
             ptr += 8;
             j++;
             len += 8;
+            if(j == loop)
+                break;
             symb.symb = fgetc(fr);
         }
-        if(feof(fr) && len > 0){
+        char * ptr2 = str + len - 10;
+        if(i == readsnumb - 1 && len > 0){
             for(int k = 0; k < tail; k++){
                 str[len - k - 1] = '\0';
             }
             len -= tail;
         }
         ind = len;
-        remaind = len;
+        //remaind = len;
         if(ind > 256 && i != readsnumb)
             ind = ind - 256;
-        count = 0;
+        long count = 0;
         NODE *head = phead;
-        while (len != 0) {
+        while (len != 0 && count - 1 != len) {
             if (head) {
                 if (head->isSymb) {
                     fprintf(fw, "%c", head->symb);
@@ -143,7 +143,8 @@ void Decompression(FILE* fw, FILE* fr, char name[])
                 }
             }
         }
-        char * ptr2 = str + len - remaind;
+
+        ptr2 = str + len - remaind;
         if(ind > 256){
             memcpy(transfer, ptr2, remaind);
         }
