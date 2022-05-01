@@ -1,5 +1,5 @@
 #define _CRT_SECURE_NO_WARNINGS
-#include <stdio.h>
+#include "progressbar.h"
 #include <stdlib.h>
 #include "node.h"
 #include "btree.h"
@@ -7,7 +7,7 @@
 #include <locale.h>
 #include <math.h>
 #define SIZE 1000
-#define PART_TO_READ 1
+#define PART_TO_READ 32
 
 int main()
 {
@@ -74,6 +74,7 @@ int main()
             memcpy(transfer, ptr2, remaind);
         }
         free(str);
+        progressbar(i, readsnumb);
     }
     fclose(fr);
     fclose(fw);
@@ -93,10 +94,14 @@ int main()
     remove("temp.txt");
     DeleteTree(phead);
 
-    char choice[4];
-    printf("Do you want to decompress file? Answer yes or no\n");
-    scanf("%s", choice);
-    if(!strcmp(choice, "yes"))
+    char choice[4] = {"\0"};
+    while(strcmp(choice, "yes") != 0 && strcmp(choice, "no") != 0) {
+        printf("Do you want to decompress file? Answer yes or no\n");
+        scanf("%s", choice);
+    }
+    if(!strcmp(choice, "yes")) {
         Decompression(fw, fr, name);
+        printf("\r");
+    }
     return 0;
 }

@@ -1,10 +1,11 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include "binary.h"
+#include "progressbar.h"
 #include "btree.h"
 #include <stdlib.h>
 #include <math.h>
 #define BIT8 8
-#define PART_TO_READ 1
+#define PART_TO_READ 32
 #define SIZE 10000
 
 void MakeBinaryStr(FILE * fr,char *str, long length, long* count, int* tail, unsigned char arr[256][CODE_SIZE], int flag, int readsnumb)
@@ -118,7 +119,6 @@ void Decompression(FILE* fw, FILE* fr, char name[])
             len -= tail;
         }
         ind = len;
-        //remaind = len;
         if(ind > 256 && i != readsnumb)
             ind = ind - 256;
         long count = 0;
@@ -149,6 +149,7 @@ void Decompression(FILE* fw, FILE* fr, char name[])
             memcpy(transfer, ptr2, remaind);
         }
         free(str);
+        progressbar(i, readsnumb+1);
     }
     fclose(fr);
     fclose(fw);
