@@ -1,6 +1,5 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdlib.h>
-#include <string.h>
 #include "btree.h"
 #include <stdio.h>
 
@@ -20,7 +19,7 @@ NODE* MakeNodeFromNode( NODE* left, NODE* right)
     else
     {
         return NULL;
-    }  
+    }
 }
 
 NODE* MakeTreeFromList(NODE* head)
@@ -48,14 +47,17 @@ void Simmetric(NODE* root, int * level, int * max, unsigned char* code, unsigned
         else if (root->isSymb == 1)
         {
             int n = root->symb;
-           for (int i = 0; i < *level; ++i)
-           {
-               arr[n][i] = code[i];
-           }
-           arr[n][*level] = '\0';
-           if (*level > *max)
-               *max = *level;
-           root->level = *level;
+            for (int i = 0; i < *level; ++i)
+            {
+                arr[n][i] = code[i];
+            }
+            if(*level == 0 && !root->left && !root->right) {
+                arr[n][0] = '1';
+                *max = 1;
+            }
+            if (*level > *max)
+                *max = *level;
+            root->level = *level;
         }
         if (root->right)
         {

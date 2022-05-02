@@ -10,4 +10,5 @@ void Simmetric(NODE* root, int* level, int * max, unsigned char* code, unsigned 
 
 NODE* DeleteTree(NODE* root);
 
-#endif 
+#endif
+

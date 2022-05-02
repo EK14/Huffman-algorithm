@@ -27,7 +27,7 @@ void Add2List(NODE** pphead, const NODE*  tmp)
     {
         if ((*pphead)->freq >= tmp->freq)
             break;
-        pphead = &((*pphead)->next);                  
+        pphead = &((*pphead)->next);
     }
     NODE* pnew = (NODE*)malloc(sizeof(NODE));
     if (pnew)

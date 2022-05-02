@@ -1,7 +1,7 @@
-#define _CRT_SECURE_NO_WARNINGS
 #ifndef HAFFMAN_BINARY_H
 #define HAFFMAN_BINARY_H
 #include <stdio.h>
+#include <string.h>
 #include "node.h"
 
 typedef union bit2char {
@@ -18,10 +18,10 @@ typedef union bit2char {
     }mbit;
 }BIT2CHAR;
 
-void MakeBinaryStr(FILE* fr, unsigned char* str, long length, int* count, int* tail, unsigned char arr[256][CODE_SIZE]);
+void MakeBinaryStr(FILE* fr,  char* str, long length, long* count, int* tail, unsigned char arr[256][CODE_SIZE], int flag, int readsnumb);
 
 void Compression(FILE* fr, const unsigned char* str, long length, int count, int tail, int freq[256], int maxlev);
 
-void Decompression(FILE* fr, char name[]);
+void Decompression(FILE* fw, FILE* fr, char name[]);
 #endif
 
