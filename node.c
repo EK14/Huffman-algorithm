@@ -1,86 +1,60 @@
 #include <stdlib.h>
 #include "node.h"
 
-
-void Add2List(NODE** pphead, NODE* tmp)
+void CreateList(FILE * fr, NODE ** phead, int * freq)
 {
-	while (*pphead)
-	{
-		if ((*pphead)->freq >= tmp->freq)
-			break;
-		pphead = &((*pphead)->next);
-	}
-	NODE* pnew = (NODE*)malloc(sizeof(NODE));
-	pnew->freq = tmp->freq;
-	pnew->symb = tmp->symb;
-	pnew->isSymb = tmp->isSymb;
-	pnew->next = *pphead;
-	*pphead = pnew;
+    NODE data;
+    data.isSymb = 1;
+    data.left = NULL;
+    data.right = NULL;
+    data.next = NULL;
+    data.level = 0;
+
+    for (int i = 0; i < 256; ++i)
+    {
+        if (freq[i] > 0)
+        {
+            data.freq = freq[i];
+            data.symb = i;
+            Add2List(phead, &data);
+        }
+    }
+}
+
+void Add2List(NODE** pphead, const NODE*  tmp)
+{
+    while (*pphead)
+    {
+        if ((*pphead)->freq >= tmp->freq)
+            break;
+        pphead = &((*pphead)->next);
+    }
+    NODE* pnew = (NODE*)malloc(sizeof(NODE));
+    if (pnew)
+    {
+        pnew->freq = tmp->freq;
+        pnew->symb = tmp->symb;
+        pnew->isSymb = tmp->isSymb;
+        pnew->next = *pphead;
+        if (tmp->left)
+            pnew->left = tmp->left;
+        else
+            pnew->left = NULL;
+        if (tmp->right)
+            pnew->right = tmp->right;
+        else
+            pnew->right = NULL;
+        *pphead = pnew;
+    }
 }
 
 void PrintList(const NODE* phead)
 {
-	while (phead)
-	{
-		printf("['%c' %d %d]-> ", phead->symb, phead->freq, phead->isSymb);
-		phead = phead->next;
-	}
-	printf("\n");
-}
-
-NODE* MakeNodeFromNode(const NODE* left, const NODE* right)
-{
-	NODE* res = (NODE*)malloc(sizeof(NODE));
-	res->freq = left->freq + right->freq;
-	res->isSymb = 0;
-	res->symb = 0;
-	res->left = left;
-	res->right = right;
-	res->next = 0;
-	return res;
-}
-
-NODE* MakeTreeFromList(NODE* head)
-{
-	while (head && head->next)
-	{
-		NODE* left = head;
-		NODE* right = head->next;
-		Add2List(&(head->next->next), MakeNodeFromNode(left, right));
-		head = head->next->next;
-	}
-	return head;
+    while (phead)
+    {
+        printf( "['%c' %d]-> ", phead->symb, phead->freq);
+        phead = phead->next;
+    }
 }
 
 
-//NODE* Add2Tree(NODE* root, NODE* tmp)
-//{
-//	if (root == NULL)
-//	{
-//		root = (NODE*)malloc(sizeof(NODE));
-//		root->freq = value;
-//		root->left = root->right = NULL;
-//	}
-//	else
-//	{
-//		if (value < root->freq)
-//		{
-//			root->left = Add2Tree(root->left, value);
-//		}
-//		else 
-//		{
-//			root->right = Add2Tree(root->right, value);
-//		}
-//	}
-//	return root;
-//}
-
-//void Simmetric(const NODE* root)
-//{
-//	if (root)
-//	{
-//		Simmetric(root->left);
-//		printf("%5d", root->freq);
-//		Simmetric(root->right);
-//	}
-//}
